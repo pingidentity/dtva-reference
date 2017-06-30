@@ -1,0 +1,52 @@
+description = 'Distributed Session Manager - API WAR'
+
+apply plugin: 'war'
+apply plugin: 'findbugs'
+apply plugin: 'jettyEclipse'
+apply plugin: 'com.github.ben-manes.versions'
+buildscript {
+	dependencies {
+		classpath buildscripts.jetty_eclipse_plugin		
+ 	}
+}
+findbugs {
+    effort = 'max'
+    reportLevel = 'medium'
+}
+
+findbugsMain {
+	reports {
+	    xml.enabled = false
+	    html.enabled = true
+	}
+}
+jettyEclipse { }
+
+dependencies {
+    providedCompile 'com.pingidentity.labs.rapport:rapport-api:1.0.0'
+    compile			'com.github.dwaite:problem-details:1.0.0'
+	providedCompile	project(':dtva-state-machine')
+    providedCompile	libraries.rs_api
+    providedCompile	libraries.validation_api
+    providedCompile	libraries.jetty
+    	providedCompile	libraries.cbor
+    	
+    providedCompile libraries.slf4j_api
+
+    providedCompile libraries.servlet_api
+
+    providedCompile 	libraries.jersey_container_servlet
+    providedCompile libraries.jersey_json_processing
+
+    testCompile libraries.assertj
+    testCompile libraries.junit
+    testCompile libraries.jersey_test_framework
+}
+
+test.doFirst {
+	tasks.jettyEclipseRun.daemon = true
+    tasks.jettyEclipseRun.execute()
+}
+test.doLast {
+    tasks.jettyEclipseStop.execute()
+}

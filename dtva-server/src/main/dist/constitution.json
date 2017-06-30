@@ -1,0 +1,25 @@
+{
+  "applicationClass": "com.pingidentity.labs.dtva.server.WebAPIApplication",
+  "addresses" : [
+    {
+      "name":     "local",
+      "local":    true,
+      "externalAddress":  "127.0.0.1:5000"
+    },
+    {
+      "name":     "workaround",
+      "local":    true,
+      "externalAddress":  "127.0.0.1:5001"
+    },
+    {
+      "name":     "workaround2",
+      "local":    true,
+      "externalAddress":  "127.0.0.1:5002"
+    }
+  ],
+  "localConfiguration": {
+      "webAPI": "0.0.0.0:8080"
+  },
+  "constitution": {
+  }
+}

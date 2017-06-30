@@ -1,0 +1,28 @@
+description = 'Distributed Implementation'
+
+apply plugin: 'java'
+apply plugin: 'findbugs'
+apply plugin: 'com.github.ben-manes.versions'
+
+
+findbugs {
+    effort = 'max'
+    reportLevel = 'low'
+}
+
+findbugsMain {
+	reports {
+	    xml.enabled = false
+	    html.enabled = true
+	}
+}
+
+dependencies {
+    compileOnly 'com.pingidentity.labs.rapport:rapport-api:1.0.0'
+    compileOnly libraries.validation_api
+    compileOnly libraries.slf4j_api
+    compileOnly libraries.json
+	compileOnly libraries.cbor
+    testCompile libraries.assertj
+    testCompile libraries.junit  
+}

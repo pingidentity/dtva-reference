@@ -1,0 +1,68 @@
+description = 'Rapport Application w Server'
+
+apply plugin: 'application'
+apply plugin: 'findbugs'
+apply plugin: 'com.github.ben-manes.versions'
+
+mainClassName = "arbitrary"
+
+findbugs {
+    effort = 'max'
+    reportLevel = 'low'
+}
+
+findbugsMain {
+	reports {
+	    xml.enabled = false
+	    html.enabled = true
+	}
+}
+
+dependencies {
+    compile 'com.pingidentity.labs.rapport:rapport-api:1.0.0'
+    compile libraries.json
+    compile libraries.slf4j_api
+    compile libraries.slf4j_simple
+    compile project(':dtva-state-machine')
+    compile	libraries.rs_api
+
+    testCompile libraries.assertj
+    testCompile libraries.junit
+    testCompile libraries.jersey_test_framework
+    runtime 'com.pingidentity.labs.rapport:rapport-impl-lonely:1.0.0'
+
+    compile	libraries.validation_api
+    compile	libraries.jetty
+    compile	libraries.cbor
+//    compile libraries.servlet_api
+
+    compile 	libraries.jersey_container_servlet
+    compile libraries.jersey_json_processing
+
+    testCompile libraries.assertj
+    testCompile libraries.junit
+    testCompile libraries.jersey_test_framework
+}
+
+task copyWar(type: Copy) {
+    from {project(':dtva-api').war}
+    rename { String filename -> "dtva-api.war" }
+    into "build"
+}
+
+task runWithConstitution(dependsOn: copyWar, type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "com.pingidentity.labs.rapport.Main"
+    args = ["./src/main/dist/constitution.json"]
+}
+
+// distributions {
+//     main {
+//         contents {
+// 		    from {project(':dsm-api').war} {
+// 			    rename { String filename -> "dsm-api.war" }
+// 			    into "lib"
+// 			}
+//         }
+//     }
+// }
